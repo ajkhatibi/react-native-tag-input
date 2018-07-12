@@ -96,10 +96,6 @@ type OptionalProps = {
    * Any ScrollView props (horizontal, showsHorizontalScrollIndicator, etc.)
   */
   scrollViewProps?: $PropertyType<ScrollView, 'props'>,
-      /**
-   * bool to turn off textinput
-  */
- renderTextInput?: boolean 
 };
 type Props<T> = RequiredProps<T> & OptionalProps;
 type State = {
@@ -126,8 +122,6 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
     maxHeight: PropTypes.number,
     onHeightChange: PropTypes.func,
     scrollViewProps: PropTypes.shape(ScrollView.propTypes),
-    renderTextInput: PropTypes.bool
-
   };
   props: Props<T>;
   state: State;
@@ -145,9 +139,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
     tagTextColor: '#777777',
     inputDefaultWidth: 90,
     inputColor: '#777777',
-    maxHeight: 75,    
-    renderTextInput: true
-
+    maxHeight: 75,
   };
 
   static inputWidth(
@@ -252,37 +244,6 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
     }, 0);
   }
 
-  renderTextInput = (renderTextInput: boolean) => {
-    if (!this.props.renderTextInput) {
-      return null;
-    } else if (this.props.renderTextInput) {
-        <View style={[
-          styles.textInputContainer,
-          { width: this.state.inputWidth },
-        ]}>
-          <TextInput
-            ref={this.tagInputRef}
-            blurOnSubmit={false}
-            onKeyPress={this.onKeyPress}
-            value={this.props.text}
-            style={[styles.textInput, {
-              width: this.state.inputWidth,
-              color: this.props.inputColor,
-            }]}
-            onBlur={Platform.OS === "ios" ? this.onBlur : undefined}
-            onChangeText={this.props.onChangeText}
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="Start typing"
-            returnKeyType="done"
-            keyboardType="default"
-            underlineColorAndroid="rgba(0,0,0,0)"
-            {...this.props.inputProps}
-          />
-        </View>
-    }
-  }
-
   render() {
     const tags = this.props.value.map((tag, index) => (
       <Tag
@@ -302,7 +263,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
 
     return (
       <TouchableWithoutFeedback
-        onPress={this.focus}
+        // onPress={this.focus}
         style={styles.container}
         onLayout={this.measureWrapper}
       >
@@ -318,7 +279,31 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
           >
             <View style={styles.tagInputContainer}>
               {tags}
-              {this.renderTextInput()}
+              <View style={[
+                styles.textInputContainer,
+                { width: this.state.inputWidth },
+              ]}>
+                <TextInput
+                  ref={this.tagInputRef}
+                  blurOnSubmit={false}
+                  onKeyPress={this.onKeyPress}
+                  value={this.props.text}
+                  style={[styles.textInput, {
+                    width: this.state.inputWidth,
+                    color: this.props.inputColor,
+                  }]}
+                  onBlur={Platform.OS === "ios" ? this.onBlur : undefined}
+                  onChangeText={this.props.onChangeText}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Start typing"
+                  returnKeyType="done"
+                  keyboardType="default"
+                  editable={this.props.editable}
+                  underlineColorAndroid="rgba(0,0,0,0)"
+                  {...this.props.inputProps}
+                />
+              </View>
             </View>
           </ScrollView>
         </View>

@@ -397,7 +397,18 @@ class Tag extends React.PureComponent<TagProps> {
     let tagLabel;
     if (React.isValidElement(this.props.label)) {
       tagLabel = this.props.label;
-    } else {
+    } else if (this.props.editable) {
+        tagLabel = (
+          <Text style={[
+              styles.tagText,
+              { color: this.props.tagTextColor },
+              this.props.tagTextStyle,
+            ]}>
+              {this.props.label}
+              &nbsp;&times;
+          </Text>
+        );
+    } else if (!this.props.editable) {
       tagLabel = (
         <Text style={[
             styles.tagText,
@@ -405,7 +416,6 @@ class Tag extends React.PureComponent<TagProps> {
             this.props.tagTextStyle,
           ]}>
             {this.props.label}
-            &nbsp;&times;
         </Text>
       );
     }

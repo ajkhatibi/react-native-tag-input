@@ -216,7 +216,8 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
       return;
     }
     const tags = [...this.props.value];
-    tags.pop();
+    //Caused an issue with backspace
+    // tags.pop();
     this.props.onChange(tags);
     this.scrollToEnd();
     this.focus();
